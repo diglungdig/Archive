@@ -1,0 +1,25 @@
+A. Basic User Control(By 04/15)
+1.MOVE (#DONE)
+2.JUMP(double Jump included)  (#DONE)
+3.Mouse Positional Trace 
+4.Crounch (#DONE)
+5.Nuts Launch
+6.Camera and background parallexing
+
+		Sprites Design
+
+B.System (By 05/01)
+1.Inventory
+2.Store
+
+C.UI(By 06/01)
+1.SAVE
+2.LOAD
+3.BASICS
+
+D. AI(By 07/01)
+
+E.Animation
+
+
+F. Polishment

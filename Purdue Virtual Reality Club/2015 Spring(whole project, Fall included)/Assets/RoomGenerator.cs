@@ -11,7 +11,7 @@ public class RoomGenerator : MonoBehaviour {
 	public GameObject doorTile;
 	public int RandomSizeUpperBound = 8;
 	public int RandomSizeLowerBound = 2;
-	public bool irregularShapeOrNot = true;
+	public bool irregularShapeOrNot = false;
 
 	private GameObject room;
 
@@ -52,8 +52,12 @@ public class RoomGenerator : MonoBehaviour {
 		//add
 		if (irregularShapeOrNot == true) {
 
-			irregularShapeType = RandomShape();
-			newRoom = irreguralize(newRoom, irregularShapeType);
+			irregularShapeType = RandomShape ();
+			newRoom = irreguralize (newRoom, irregularShapeType);
+
+		} else {
+
+			newRoom = calculateTilePosition(newRoom);
 
 		}
 
@@ -143,7 +147,7 @@ public class RoomGenerator : MonoBehaviour {
 		public List<Tile> floorTiles;
 		public List<Tile> cornerTiles;
 		public List<Tile> inwardTiles;
-		public bool irregularShapeOrNot1;
+		public static bool irregularShapeOrNot1 = false;
 
 
 		public Room(){}
@@ -156,57 +160,103 @@ public class RoomGenerator : MonoBehaviour {
 			doorTiles = new List<Tile>();
 			cornerTiles = new List<Tile>();
 			inwardTiles = new List<Tile>();
-			//
-			irregularShapeOrNot1 = true;
 
-			if(irregularShapeOrNot1 == false){
+			//irregularShapeOrNot1 = true;
+
+			/*if(irregularShapeOrNot1 == false){
 				calculateTilePosition();
-			}
+			}*/
 		}
 
 		//should be a method to calculate every single tile position from length/width
 		public void calculateTilePosition(){
 
 
-			//four points from center point to edges
-			int halfLengthLeft = (int)(centerPoint.x - lengthWithoutBound / 2) + 1;
-			int halfLengthRight = (int)(centerPoint.x + lengthWithoutBound / 2) - 1;
-			int halfWidthBot = (int)(centerPoint.z - widthWithoutBound / 2) + 1;
-			int halfWidthTop = (int)(centerPoint.z + widthWithoutBound / 2) - 1;
+				//four points from center point to edges
+				int halfLengthLeft = (int)(centerPoint.x - lengthWithoutBound / 2) + 1;
+				int halfLengthRight = (int)(centerPoint.x + lengthWithoutBound / 2) - 1;
+				int halfWidthBot = (int)(centerPoint.z - widthWithoutBound / 2) + 1;
+				int halfWidthTop = (int)(centerPoint.z + widthWithoutBound / 2) - 1;
 
-			//!Floor first
-			floorTiles.Clear ();
-			for (int x = halfLengthLeft; x <= halfLengthRight ; x = x+2) {
-				for (int z = halfWidthBot; z <= halfWidthTop ; z = z+2) {
-					Debug.Log(z);
-					Debug.Log(x);
-					floorTiles.Add(new Tile(1,x,z,0));
+				//!Floor first
+				floorTiles.Clear ();
+				for (int x = halfLengthLeft; x <= halfLengthRight; x = x+2) {
+					for (int z = halfWidthBot; z <= halfWidthTop; z = z+2) {
+						Debug.Log (z);
+						Debug.Log (x);
+						floorTiles.Add (new Tile (1, x, z, 0));
+					}
 				}
+
+				//!Wall second
+				wallTiles.Clear ();
+				for (int x = halfLengthLeft; x <= halfLengthRight; x = x+2) {
+					wallTiles.Add (new Tile (2, x, halfWidthBot - 2, 180));
+					wallTiles.Add (new Tile (2, x, halfWidthTop + 2, 0));
+				}
+				for (int z = halfWidthBot; z <= halfWidthTop; z = z+2) {
+					wallTiles.Add (new Tile (2, halfLengthLeft - 2, z, 270));
+					wallTiles.Add (new Tile (2, halfLengthRight + 2, z, 90));
+				}
+
+
+				//!Corner third
+				cornerTiles.Clear ();
+				cornerTiles.Add (new Tile (3, halfLengthLeft - 1.5f, halfWidthBot - 1.5f, 90));
+				cornerTiles.Add (new Tile (3, halfLengthRight + 1.5f, halfWidthBot - 1.5f, 0));
+				cornerTiles.Add (new Tile (3, halfLengthLeft - 1.5f, halfWidthTop + 1.5f, 180));
+				cornerTiles.Add (new Tile (3, halfLengthRight + 1.5f, halfWidthTop + 1.5f, 270));
+
+
 			}
 
-			//!Wall second
-			wallTiles.Clear ();
-			for (int x = halfLengthLeft; x <= halfLengthRight; x = x+2) {
-				wallTiles.Add(new Tile(2,x,halfWidthBot-2,180));
-				wallTiles.Add(new Tile(2,x,halfWidthTop+2,0));
-			}
-			for (int z = halfWidthBot; z <= halfWidthTop; z = z+2) {
-				wallTiles.Add(new Tile(2,halfLengthLeft-2,z,270));
-				wallTiles.Add(new Tile(2,halfLengthRight+2,z,90));
-			}
-
-
-			//!Corner third
-			cornerTiles.Clear ();
-			cornerTiles.Add (new Tile(3,halfLengthLeft-1.5f,halfWidthBot-1.5f,90));
-			cornerTiles.Add (new Tile(3,halfLengthRight+1.5f,halfWidthBot-1.5f,0));
-			cornerTiles.Add (new Tile(3,halfLengthLeft-1.5f,halfWidthTop+1.5f,180));
-			cornerTiles.Add (new Tile(3,halfLengthRight+1.5f,halfWidthTop+1.5f,270));
-
-
-		}
 
 	}
+
+	public Room calculateTilePosition(Room room){
+		
+		
+		//four points from center point to edges
+		int halfLengthLeft = (int)(room.centerPoint.x - room.lengthWithoutBound / 2) + 1;
+		int halfLengthRight = (int)(room.centerPoint.x + room.lengthWithoutBound / 2) - 1;
+		int halfWidthBot = (int)(room.centerPoint.z - room.widthWithoutBound / 2) + 1;
+		int halfWidthTop = (int)(room.centerPoint.z + room.widthWithoutBound / 2) - 1;
+		
+		//!Floor first
+		room.floorTiles.Clear ();
+		for (int x = halfLengthLeft; x <= halfLengthRight; x = x+2) {
+			for (int z = halfWidthBot; z <= halfWidthTop; z = z+2) {
+				Debug.Log (z);
+				Debug.Log (x);
+				room.floorTiles.Add (new Tile (1, x, z, 0));
+			}
+		}
+		
+		//!Wall second
+		room.wallTiles.Clear ();
+		for (int x = halfLengthLeft; x <= halfLengthRight; x = x+2) {
+			room.wallTiles.Add (new Tile (2, x, halfWidthBot - 2, 180));
+			room.wallTiles.Add (new Tile (2, x, halfWidthTop + 2, 0));
+		}
+		for (int z = halfWidthBot; z <= halfWidthTop; z = z+2) {
+			room.wallTiles.Add (new Tile (2, halfLengthLeft - 2, z, 270));
+			room.wallTiles.Add (new Tile (2, halfLengthRight + 2, z, 90));
+		}
+		
+
+		//!Corner third
+		room.cornerTiles.Clear ();
+		room.cornerTiles.Add (new Tile (3, halfLengthLeft - 1.5f, halfWidthBot - 1.5f, 90));
+		room.cornerTiles.Add (new Tile (3, halfLengthRight + 1.5f, halfWidthBot - 1.5f, 0));
+		room.cornerTiles.Add (new Tile (3, halfLengthLeft - 1.5f, halfWidthTop + 1.5f, 180));
+		room.cornerTiles.Add (new Tile (3, halfLengthRight + 1.5f, halfWidthTop + 1.5f, 270));
+
+
+		return room;
+		
+	}
+
+
 
 	//using enum, three types
 	public enum IrregularShape{
@@ -222,12 +272,12 @@ public class RoomGenerator : MonoBehaviour {
 			room = TshapeGenerator (room);
 		} else if (type == IrregularShape.Lshape) {
 			room =LshapeGenerator (room);
-		} /*else if (type == IrregularShape.Cross) {
+		}/* else if (type == IrregularShape.Cross) {
 			room = CrossGenerator (room);
 		} else if (type == IrregularShape.Eshape) {
 			room = EshapeGenerator(room);
-		}
-*/
+		}*/
+
 		return room;
 	}
 
