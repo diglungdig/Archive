@@ -1,0 +1,1 @@
+Polynoimal Simplification: Convert something like(x+y)^3 into x2x +2xxy + xy2 + x2y + 2xyy + y2y(ListRepresentation) using stack & recursion.  

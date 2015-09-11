@@ -1,0 +1,1 @@
+Music Generator: Convert freq file to wav file using bit operations & read/write.

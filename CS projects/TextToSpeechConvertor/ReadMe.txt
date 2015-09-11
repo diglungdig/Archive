@@ -1,0 +1,1 @@
+TextToSpeechConvertor: Read a .txt file and convert it a sound file(.wav) bit operations, Big-endian/Little-endian

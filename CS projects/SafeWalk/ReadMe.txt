@@ -1,0 +1,1 @@
+Purdue SafeWalk System, using Model-View-Controller UI architecture, regarding network communication, multi-threaded processing & user request handling.
